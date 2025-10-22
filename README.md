@@ -44,20 +44,16 @@ trip-agent/
 └─ pnpm-workspace.yaml           # Monorepo config
 ```
 
-## 🔒 Security Notes
+## Security Notes
 
 - **Session cookies**: httpOnly, secure, sameSite=lax
 - **No tokens stored**: Session state only (Day-1)
 - **Provider APIs**: Stubbed for Day-1, real auth later
 
-## 📚 Tech Stack
+## Tech Stack
 
 - **Frontend**: Next.js 14 (App Router) + TypeScript + Tailwind CSS
 - **Backend**: Next.js API Routes + Node.js runtime
 - **Database**: Prisma + SQLite (local dev)
 - **Testing**: Vitest + Testing Library
 - **Package Manager**: pnpm (workspaces)
-
-## 📄 License
-
-MIT License - see LICENSE file for details
