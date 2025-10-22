@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  state     String    // JSON string
+  itinerary Itinerary?
+  pins      Pin[]
+  bookings  Booking[]
+  candidateItems CandidateItem[]
+}
+
+model Itinerary {
+  id        String   @id @default(cuid())
+  sessionId String   @unique
+  days      String   // JSON string: [{ day:1, slots:[{type, refId?, name, start?, end?}]}]
+  costUSD   Float?
+  notes     String?
+  session   Session  @relation(fields: [sessionId], references: [id])
+}
+
+model Pin {
+  id         String  @id @default(cuid())
+  sessionId  String
+  category   String
+  externalId String
+  day        Int?
+  slot       Int?
+  session    Session @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId])
+}
+
+model Booking {
+  id         String  @id @default(cuid())
+  name       String
+  sessionId  String
+  kind       String  // "flight" | "hotel"
+  provider   String  // "duffel" | "amadeus" | "expedia"
+  externalId String
+  status     String
+  payload    String  // JSON string
+  createdAt  DateTime @default(now())
+  session    Session @relation(fields: [sessionId], references: [id])
+}
+
+model CandidateItem {
+  id         String  @id @default(cuid())
+  sessionId  String
+  category   String  // "flight" | "hotel" | "food" | "activity"
+  source     String  // "duffel" | "amadeus" | "expedia" | "google"
+  externalId String
+  payload    String  // JSON string
+  score      Float?
+  createdAt  DateTime @default(now())
+  session    Session @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId, category])
+}
+
+// Day-2: Tool cache for Google API responses
+model ToolCache {
+  id        String   @id @default(cuid())
+  key       String   @unique // SHA256 hash of tool + args
+  value     String   // JSON string of cached response
+  ttl       DateTime // expiration time
+  createdAt DateTime @default(now())
+
+  @@index([key])
+}

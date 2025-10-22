@@ -1,0 +1,10 @@
+[
+  {
+    "role": "user",
+    "content": "Plan 3 days in Osaka, food + cycling, <$120/night"
+  },
+  {
+    "role": "assistant",
+    "content": "I'll help you plan a 3-day trip to Osaka focused on food and cycling, keeping accommodation under $120/night. Let me create a draft itinerary for you."
+  }
+]
